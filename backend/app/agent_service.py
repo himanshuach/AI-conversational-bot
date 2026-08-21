@@ -523,14 +523,14 @@ class AgentService:
             suggested_card = SuggestedCard(
                 type="2bhk",
                 title="Northstar One — 2 BHK Luxury",
-                subtitle="1,450 sq.ft • Panoramic Deck Balcony",
+                subtitle="Starting price: ₹1.35 Cr onwards",
                 price="₹1.35 Cr onwards"
             )
         elif "3 bhk" in lower_msg or q.configuration == "3 BHK":
             suggested_card = SuggestedCard(
                 type="3bhk",
                 title="Northstar One — 3 BHK Premier",
-                subtitle="2,150 sq.ft • Unobstructed Aravalli Ridge Views",
+                subtitle="Starting price: ₹1.75 Cr onwards",
                 price="₹1.75 Cr onwards"
             )
 
