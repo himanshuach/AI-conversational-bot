@@ -1,4 +1,5 @@
 import { ChatMessage, LeadProfile, SiteVisitBooking, ConversationAnalytics } from '../types';
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || '';
 
 export interface ChatResponse {
   replyText: string;
@@ -19,7 +20,7 @@ export async function sendChatMessage(
   sessionId: string = 'session-1'
 ): Promise<ChatResponse> {
   try {
-    const response = await fetch('/api/chat', {
+    const response = await fetch(`${API_BASE_URL}/api/chat`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
@@ -50,7 +51,7 @@ export async function requestSiteVisit(
   configurationInterest?: string
 ): Promise<{ success: boolean; booking: SiteVisitBooking; message: string }> {
   try {
-    const response = await fetch('/api/site-visit', {
+    const response = await fetch(`${API_BASE_URL}/api/site-visit`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
@@ -79,7 +80,7 @@ export async function fetchConversationAnalytics(
   leadProfile: LeadProfile
 ): Promise<ConversationAnalytics> {
   try {
-    const response = await fetch('/api/conversation/analytics', {
+    const response = await fetch(`${API_BASE_URL}/api/conversation/analytics`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
@@ -101,8 +102,8 @@ export async function fetchConversationAnalytics(
       sessionId,
       status: 'Qualified Lead',
       leadProfile,
-      aiNote: 'The client showed strong interest in Sector 79 properties with unobstructed views. Prioritize units in Tower B & C.',
-      recommendedUnits: ['Tower B - Unit 1802 (3 BHK Premier)', 'Tower C - Unit 2204 (3 BHK Premier)'],
+      aiNote: 'Conversation analytics could not be retrieved from the backend. The available conversation and lead information has been retained.',
+      recommendedUnits: [],
       totalMessages: history.length,
       durationMinutes: 3,
       keyTopicsDiscussed: ['Northstar One Overview', '3 BHK Configuration', 'Site Visit Scheduling'],
@@ -112,7 +113,7 @@ export async function fetchConversationAnalytics(
 
 export async function requestLuxuryAdvisor(): Promise<any> {
   try {
-    const response = await fetch('/api/advisor-request', {
+    const response = await fetch(`${API_BASE_URL}/api/advisor-request`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
     });
