@@ -200,4 +200,4 @@ python backend/run_tests.py
 ## 10. AI Tools Used
 
 * **OpenAI API (`gpt-4o-mini`):** Used for LLM conversational inference, function calling, and structured JSON analytics extraction.
-* **Antigravity IDE:** Used during development for pair programming, test orchestration, and verification.
+* **ChatGPT:** Used during development for guidance.
