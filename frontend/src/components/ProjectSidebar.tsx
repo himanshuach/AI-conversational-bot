@@ -1,16 +1,14 @@
 import React from 'react';
-import { PROJECT_DETAILS, FLOOR_PLANS } from '../data/projectData';
 import { LeadProfile } from '../types';
 import {
   Building2,
   MapPin,
-  Sparkles,
   CalendarDays,
-  ShieldCheck,
   PhoneCall,
   CheckCircle2,
   ChevronRight,
   UserCheck,
+  BarChart3,
 } from 'lucide-react';
 
 interface ProjectSidebarProps {
@@ -26,8 +24,6 @@ interface ProjectSidebarProps {
 export const ProjectSidebar: React.FC<ProjectSidebarProps> = ({
   lead,
   onOpenSiteVisit,
-  onOpenFloorPlans,
-  onOpenAmenities,
   onOpenAdvisor,
   onOpenSummary,
   onSelectPrompt,
@@ -41,9 +37,9 @@ export const ProjectSidebar: React.FC<ProjectSidebarProps> = ({
           <div className="flex items-start justify-between gap-2 mb-2">
             <div>
               <span className="inline-block text-[10px] font-bold uppercase tracking-wider text-[#735A3A] bg-[#F5EFEB] px-2 py-0.5 rounded">
-                Flagship Development
+                Residential Development
               </span>
-              <h2 className="font-semibold text-xl text-[#1A1A1A] mt-1.5">{PROJECT_DETAILS.name}</h2>
+              <h2 className="font-semibold text-xl text-[#1A1A1A] mt-1.5">Northstar One</h2>
             </div>
             <div className="w-8 h-8 rounded-full bg-[#FAF7F2] border border-[#EAE6E1] flex items-center justify-center text-[#735A3A]">
               <Building2 className="w-4 h-4" />
@@ -52,30 +48,34 @@ export const ProjectSidebar: React.FC<ProjectSidebarProps> = ({
 
           <p className="text-xs text-[#595959] flex items-center gap-1.5 mb-3">
             <MapPin className="w-3.5 h-3.5 text-[#735A3A] shrink-0" />
-            <span>{PROJECT_DETAILS.location}</span>
+            <span>Sector 79, Gurugram</span>
           </p>
 
-          <p className="text-xs text-[#737373] leading-relaxed mb-4">
-            {PROJECT_DETAILS.tagline}. Spread across {PROJECT_DETAILS.landParcel}.
-          </p>
-
-          {/* Quick Pricing Grid */}
+          {/* Quick Pricing Grid (Strictly 2 BHK & 3 BHK) */}
           <div className="space-y-2 pt-2 border-t border-[#F0ECE6]">
-            {FLOOR_PLANS.map((plan) => (
-              <div
-                key={plan.id}
-                onClick={() => onSelectPrompt(`Tell me details about the ${plan.type}`)}
-                className="flex items-center justify-between text-xs py-1.5 px-2 rounded-lg hover:bg-[#FBF9F7] cursor-pointer transition-colors group"
-              >
-                <div>
-                  <span className="font-medium text-[#1A1A1A] group-hover:text-[#735A3A] transition-colors">
-                    {plan.type}
-                  </span>
-                  <span className="text-[11px] text-[#8C8C8C] ml-1.5">({plan.superArea})</span>
-                </div>
-                <span className="font-semibold text-[#735A3A]">{plan.priceStarting}+</span>
+            <div
+              onClick={() => onSelectPrompt('Tell me about 2 BHK starting at ₹1.35 Cr')}
+              className="flex items-center justify-between text-xs py-2 px-2.5 rounded-xl hover:bg-[#FBF9F7] cursor-pointer transition-colors group border border-[#F0ECE6]"
+            >
+              <div>
+                <span className="font-semibold text-[#1A1A1A] group-hover:text-[#735A3A] transition-colors">
+                  2 BHK
+                </span>
               </div>
-            ))}
+              <span className="font-bold text-[#735A3A]">₹1.35 Cr onwards</span>
+            </div>
+
+            <div
+              onClick={() => onSelectPrompt('Tell me about 3 BHK starting at ₹1.75 Cr')}
+              className="flex items-center justify-between text-xs py-2 px-2.5 rounded-xl hover:bg-[#FBF9F7] cursor-pointer transition-colors group border border-[#F0ECE6]"
+            >
+              <div>
+                <span className="font-semibold text-[#1A1A1A] group-hover:text-[#735A3A] transition-colors">
+                  3 BHK
+                </span>
+              </div>
+              <span className="font-bold text-[#735A3A]">₹1.75 Cr onwards</span>
+            </div>
           </div>
         </div>
 
@@ -164,59 +164,40 @@ export const ProjectSidebar: React.FC<ProjectSidebarProps> = ({
           </button>
         </div>
 
-        {/* Quick Navigation Items */}
+        {/* Action Items */}
         <div className="space-y-1.5">
-          <button
-            onClick={onOpenFloorPlans}
-            className="w-full flex items-center justify-between p-2.5 rounded-xl hover:bg-white border border-transparent hover:border-[#EAE6E1] text-xs font-medium text-[#404040] hover:text-[#1A1A1A] transition-all duration-150"
-          >
-            <div className="flex items-center gap-2.5">
-              <Building2 className="w-4 h-4 text-[#735A3A]" />
-              <span>Architectural Floor Plans</span>
-            </div>
-            <ChevronRight className="w-3.5 h-3.5 text-[#A3A3A3]" />
-          </button>
-
-          <button
-            onClick={onOpenAmenities}
-            className="w-full flex items-center justify-between p-2.5 rounded-xl hover:bg-white border border-transparent hover:border-[#EAE6E1] text-xs font-medium text-[#404040] hover:text-[#1A1A1A] transition-all duration-150"
-          >
-            <div className="flex items-center gap-2.5">
-              <Sparkles className="w-4 h-4 text-[#735A3A]" />
-              <span>Clubhouse & Amenities</span>
-            </div>
-            <ChevronRight className="w-3.5 h-3.5 text-[#A3A3A3]" />
-          </button>
-
           <button
             onClick={onOpenSiteVisit}
             className="w-full flex items-center justify-between p-2.5 rounded-xl hover:bg-white border border-transparent hover:border-[#EAE6E1] text-xs font-medium text-[#404040] hover:text-[#1A1A1A] transition-all duration-150"
           >
             <div className="flex items-center gap-2.5">
               <CalendarDays className="w-4 h-4 text-[#735A3A]" />
-              <span>Book Private Site Visit</span>
+              <span>Schedule Site Visit</span>
+            </div>
+            <ChevronRight className="w-3.5 h-3.5 text-[#A3A3A3]" />
+          </button>
+
+          <button
+            onClick={onOpenSummary}
+            className="w-full flex items-center justify-between p-2.5 rounded-xl hover:bg-white border border-transparent hover:border-[#EAE6E1] text-xs font-medium text-[#404040] hover:text-[#1A1A1A] transition-all duration-150"
+          >
+            <div className="flex items-center gap-2.5">
+              <BarChart3 className="w-4 h-4 text-[#735A3A]" />
+              <span>Conversation Summary</span>
             </div>
             <ChevronRight className="w-3.5 h-3.5 text-[#A3A3A3]" />
           </button>
         </div>
       </div>
 
-      {/* Bottom Section: RERA & Advisor Connect */}
+      {/* Bottom Section: Advisor Connect */}
       <div className="mt-6 pt-4 border-t border-[#EAE6E1] space-y-3">
-        <div className="bg-[#FAF7F2] p-3 rounded-xl border border-[#EAE6E1] text-[11px] text-[#737373]">
-          <div className="flex items-center gap-1.5 font-medium text-[#1A1A1A] mb-1">
-            <ShieldCheck className="w-3.5 h-3.5 text-emerald-700" />
-            <span>HARERA Approved</span>
-          </div>
-          <p className="font-mono text-[10px] text-[#8C8C8C]">{PROJECT_DETAILS.reraNumber}</p>
-        </div>
-
         <button
           onClick={onOpenAdvisor}
           className="w-full py-2.5 px-3 bg-[#1A1A1A] hover:bg-[#333333] text-white rounded-xl text-xs font-medium flex items-center justify-center gap-2 shadow-sm transition-colors"
         >
           <PhoneCall className="w-3.5 h-3.5 text-[#E5D2B8]" />
-          <span>Connect with Portfolio Manager</span>
+          <span>Connect with Human Advisor</span>
         </button>
       </div>
     </aside>

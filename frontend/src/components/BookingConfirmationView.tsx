@@ -20,8 +20,8 @@ export const BookingConfirmationView: React.FC<BookingConfirmationViewProps> = (
 VERSION:2.0
 PRODID:-//Northstar Homes//Northstar One Private Site Visit//EN
 BEGIN:VEVENT
-SUMMARY:Northstar One - Private Luxury Site Visit
-DESCRIPTION:Exclusive walkthrough of Northstar One luxury residences in Sector 79, Gurugram. Host: Northstar Concierge.
+SUMMARY:Northstar One - Private Site Visit
+DESCRIPTION:Scheduled visit to Northstar One residences in Sector 79, Gurugram.
 LOCATION:Northstar One, Sector 79, Gurugram, Haryana
 STATUS:CONFIRMED
 END:VEVENT

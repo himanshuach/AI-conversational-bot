@@ -1,5 +1,5 @@
 import React from 'react';
-import { Banknote, Building2, Sparkles, CalendarDays, PhoneCall } from 'lucide-react';
+import { Banknote, Building2, CalendarDays, PhoneCall } from 'lucide-react';
 
 interface QuickActionsProps {
   onSelectAction: (prompt: string) => void;
@@ -11,8 +11,6 @@ interface QuickActionsProps {
 
 export const QuickActions: React.FC<QuickActionsProps> = ({
   onSelectAction,
-  onOpenFloorPlans,
-  onOpenAmenities,
   onOpenSiteVisit,
   onOpenAdvisor,
 }) => {
@@ -23,23 +21,23 @@ export const QuickActions: React.FC<QuickActionsProps> = ({
         className="shrink-0 inline-flex items-center gap-1.5 px-3 py-2 rounded-full border border-[#EAE6E1] bg-white text-[#595959] hover:border-[#735A3A] hover:text-[#735A3A] hover:bg-[#FAF7F2] transition-colors text-xs font-semibold"
       >
         <Banknote className="w-3.5 h-3.5 text-[#735A3A]" />
-        <span>Pricing</span>
+        <span>Pricing Overview</span>
       </button>
 
       <button
-        onClick={onOpenFloorPlans}
+        onClick={() => onSelectAction('Tell me about 2 BHK starting at ₹1.35 Cr')}
         className="shrink-0 inline-flex items-center gap-1.5 px-3 py-2 rounded-full border border-[#EAE6E1] bg-white text-[#595959] hover:border-[#735A3A] hover:text-[#735A3A] hover:bg-[#FAF7F2] transition-colors text-xs font-semibold"
       >
         <Building2 className="w-3.5 h-3.5 text-[#735A3A]" />
-        <span>Floor Plans</span>
+        <span>2 BHK (₹1.35 Cr+)</span>
       </button>
 
       <button
-        onClick={onOpenAmenities}
+        onClick={() => onSelectAction('Tell me about 3 BHK starting at ₹1.75 Cr')}
         className="shrink-0 inline-flex items-center gap-1.5 px-3 py-2 rounded-full border border-[#EAE6E1] bg-white text-[#595959] hover:border-[#735A3A] hover:text-[#735A3A] hover:bg-[#FAF7F2] transition-colors text-xs font-semibold"
       >
-        <Sparkles className="w-3.5 h-3.5 text-[#735A3A]" />
-        <span>Amenities</span>
+        <Building2 className="w-3.5 h-3.5 text-[#735A3A]" />
+        <span>3 BHK (₹1.75 Cr+)</span>
       </button>
 
       <button
@@ -55,7 +53,7 @@ export const QuickActions: React.FC<QuickActionsProps> = ({
         className="shrink-0 inline-flex items-center gap-1.5 px-3 py-2 rounded-full border border-[#DFCBB9] bg-[#F5EFEB] text-[#735A3A] hover:bg-[#EBDDCF] transition-colors text-xs font-semibold"
       >
         <PhoneCall className="w-3.5 h-3.5" />
-        <span>Advisor</span>
+        <span>Human Advisor</span>
       </button>
     </div>
   );

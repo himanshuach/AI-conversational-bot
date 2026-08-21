@@ -11,22 +11,22 @@ export const WelcomeState: React.FC<WelcomeStateProps> = ({ onSelectPrompt }) =>
     {
       icon: Info,
       text: 'Tell me about Northstar One',
-      description: 'Sector 79 master plan & Aravalli foothills views',
+      description: 'Residential development located in Sector 79, Gurugram',
     },
     {
       icon: Banknote,
       text: 'What is the price of a 2 BHK?',
-      description: 'Starting at ₹1.35 Cr with flexible payment plans',
+      description: 'Starting at ₹1.35 Crore onwards',
     },
     {
       icon: BedDouble,
       text: "I'm looking for a 3 BHK",
-      description: '2,150 sq.ft with wrap-around balconies',
+      description: 'Starting at ₹1.75 Crore onwards',
     },
     {
       icon: CalendarDays,
       text: "I'd like to schedule a site visit",
-      description: 'Reserve a curated private tour with our concierge',
+      description: 'Schedule a visit to Sector 79, Gurugram',
     },
   ];
 
@@ -48,10 +48,10 @@ export const WelcomeState: React.FC<WelcomeStateProps> = ({ onSelectPrompt }) =>
         Welcome to Northstar One
       </h1>
       <h2 className="text-base sm:text-lg font-medium text-[#735A3A] mb-2">
-        Your AI property assistant
+        AI Conversational Sales Assistant
       </h2>
       <p className="text-sm text-[#737373] max-w-sm sm:max-w-md mb-6 sm:mb-8 leading-relaxed px-2">
-        Ask about configurations, pricing, amenities or arrange a personalized site visit.
+        Inquire about configurations, starting pricing, or schedule a site visit in Sector 79.
       </p>
 
       {/* Suggestion grid — 1 column on mobile, 2 on sm+ */}

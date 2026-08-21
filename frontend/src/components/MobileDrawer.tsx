@@ -1,7 +1,6 @@
 import React from 'react';
-import { X, MapPin, ChevronRight, UserCheck, PhoneCall } from 'lucide-react';
+import { X, MapPin, ChevronRight, UserCheck, CalendarDays, BarChart3, PhoneCall } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
-import { PROJECT_DETAILS, FLOOR_PLANS } from '../data/projectData';
 import { LeadProfile } from '../types';
 
 interface MobileDrawerProps {
@@ -21,8 +20,6 @@ export const MobileDrawer: React.FC<MobileDrawerProps> = ({
   onClose,
   lead,
   onOpenSiteVisit,
-  onOpenFloorPlans,
-  onOpenAmenities,
   onOpenAdvisor,
   onOpenSummary,
   onSelectPrompt,
@@ -52,7 +49,7 @@ export const MobileDrawer: React.FC<MobileDrawerProps> = ({
               {/* Header */}
               <div className="flex items-center justify-between pb-4 border-b border-[#EAE6E1] mb-5">
                 <div>
-                  <h2 className="text-base font-bold text-[#1A1A1A]">{PROJECT_DETAILS.name}</h2>
+                  <h2 className="text-base font-bold text-[#1A1A1A]">Northstar One</h2>
                   <p className="text-xs text-[#737373] flex items-center gap-1 mt-0.5">
                     <MapPin className="w-3 h-3 text-[#735A3A]" /> Sector 79, Gurugram
                   </p>
@@ -68,24 +65,33 @@ export const MobileDrawer: React.FC<MobileDrawerProps> = ({
               {/* Pricing Cards */}
               <div className="space-y-2 mb-6">
                 <div className="text-[10px] font-bold uppercase tracking-wider text-[#8C8C8C]">
-                  Available Configurations
+                  Configurations & Starting Prices
                 </div>
-                {FLOOR_PLANS.map((plan) => (
-                  <div
-                    key={plan.id}
-                    onClick={() => {
-                      onClose();
-                      onSelectPrompt(`Tell me details about the ${plan.type}`);
-                    }}
-                    className="bg-white p-2.5 rounded-xl border border-[#EAE6E1] flex items-center justify-between text-xs cursor-pointer hover:border-[#735A3A]"
-                  >
-                    <div>
-                      <span className="font-semibold text-[#1A1A1A]">{plan.type}</span>
-                      <span className="text-[11px] text-[#8C8C8C] block">{plan.superArea}</span>
-                    </div>
-                    <span className="font-bold text-[#735A3A]">{plan.priceStarting}+</span>
+                <div
+                  onClick={() => {
+                    onClose();
+                    onSelectPrompt('Tell me about 2 BHK starting at ₹1.35 Cr');
+                  }}
+                  className="bg-white p-2.5 rounded-xl border border-[#EAE6E1] flex items-center justify-between text-xs cursor-pointer hover:border-[#735A3A]"
+                >
+                  <div>
+                    <span className="font-semibold text-[#1A1A1A]">2 BHK</span>
                   </div>
-                ))}
+                  <span className="font-bold text-[#735A3A]">₹1.35 Cr onwards</span>
+                </div>
+
+                <div
+                  onClick={() => {
+                    onClose();
+                    onSelectPrompt('Tell me about 3 BHK starting at ₹1.75 Cr');
+                  }}
+                  className="bg-white p-2.5 rounded-xl border border-[#EAE6E1] flex items-center justify-between text-xs cursor-pointer hover:border-[#735A3A]"
+                >
+                  <div>
+                    <span className="font-semibold text-[#1A1A1A]">3 BHK</span>
+                  </div>
+                  <span className="font-bold text-[#735A3A]">₹1.75 Cr onwards</span>
+                </div>
               </div>
 
               {/* Lead Profile */}
@@ -131,47 +137,44 @@ export const MobileDrawer: React.FC<MobileDrawerProps> = ({
                 <button
                   onClick={() => {
                     onClose();
-                    onOpenFloorPlans();
-                  }}
-                  className="w-full text-left p-2.5 rounded-xl hover:bg-white text-xs font-medium text-[#404040] flex items-center justify-between"
-                >
-                  <span>Floor Plans</span>
-                  <ChevronRight className="w-3.5 h-3.5 text-[#A3A3A3]" />
-                </button>
-                <button
-                  onClick={() => {
-                    onClose();
-                    onOpenAmenities();
-                  }}
-                  className="w-full text-left p-2.5 rounded-xl hover:bg-white text-xs font-medium text-[#404040] flex items-center justify-between"
-                >
-                  <span>Amenities & Clubhouse</span>
-                  <ChevronRight className="w-3.5 h-3.5 text-[#A3A3A3]" />
-                </button>
-                <button
-                  onClick={() => {
-                    onClose();
                     onOpenSiteVisit();
                   }}
                   className="w-full text-left p-2.5 rounded-xl hover:bg-white text-xs font-medium text-[#404040] flex items-center justify-between"
                 >
-                  <span>Schedule Site Visit</span>
+                  <div className="flex items-center gap-2">
+                    <CalendarDays className="w-4 h-4 text-[#735A3A]" />
+                    <span>Schedule Site Visit</span>
+                  </div>
+                  <ChevronRight className="w-3.5 h-3.5 text-[#A3A3A3]" />
+                </button>
+
+                <button
+                  onClick={() => {
+                    onClose();
+                    onOpenSummary();
+                  }}
+                  className="w-full text-left p-2.5 rounded-xl hover:bg-white text-xs font-medium text-[#404040] flex items-center justify-between"
+                >
+                  <div className="flex items-center gap-2">
+                    <BarChart3 className="w-4 h-4 text-[#735A3A]" />
+                    <span>Conversation Summary</span>
+                  </div>
                   <ChevronRight className="w-3.5 h-3.5 text-[#A3A3A3]" />
                 </button>
               </div>
             </div>
 
-            {/* Bottom Button */}
+            {/* Bottom: Human Advisor */}
             <div className="pt-4 border-t border-[#EAE6E1]">
               <button
                 onClick={() => {
                   onClose();
                   onOpenAdvisor();
                 }}
-                className="w-full py-2.5 bg-[#1A1A1A] text-white rounded-xl text-xs font-medium flex items-center justify-center gap-2"
+                className="w-full py-2.5 px-3 bg-[#1A1A1A] hover:bg-[#333333] text-white rounded-xl text-xs font-semibold flex items-center justify-center gap-2 shadow-sm transition-colors"
               >
                 <PhoneCall className="w-3.5 h-3.5 text-[#E5D2B8]" />
-                <span>Talk with Advisor</span>
+                <span>Connect with Human Advisor</span>
               </button>
             </div>
           </motion.div>

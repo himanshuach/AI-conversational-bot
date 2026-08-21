@@ -140,7 +140,7 @@ export default function App() {
         bookingData.time,
         bookingData.name,
         bookingData.phone,
-        leadProfile.configuration !== 'Not provided' ? leadProfile.configuration : '3 BHK Premier'
+        leadProfile.configuration !== 'Not provided' ? leadProfile.configuration : '3 BHK'
       );
 
       try {

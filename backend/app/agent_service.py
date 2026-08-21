@@ -267,15 +267,19 @@ class AgentService:
         # Purpose
         if any(w in lower for w in ["investment", "invest", "returns", "rental", "nivesh"]):
             session.qualification_state.purpose = "Investment"
-        elif any(w in lower for w in ["self-use", "self use", "stay", "family", "live", "rehna", "shift"]):
+        elif any(w in lower for w in ["self-use", "self use", "stay", "family", "live", "rehna", "shift", "buying it for my family", "for my family"]):
             session.qualification_state.purpose = "Self-use"
 
         # Budget extraction
-        budget_match = re.search(r'(\d+(\.\d+)?)\s*(cr|crore|crores|lakh|lacs|lac|k)', lower)
+        budget_match = re.search(r'(₹|rs\.?|inr)?\s*(\d+(\.\d+)?)\s*(cr|crore|crores|lakh|lacs|lac|k)', lower)
         if budget_match:
-            session.qualification_state.budget = budget_match.group(0).upper()
-        elif "1.35" in lower or "1.5" in lower or "1.75" in lower or "2 cr" in lower:
-            session.qualification_state.budget = "₹1.35 - ₹2.0 Cr"
+            unit = budget_match.group(4)
+            unit_str = "Cr" if "cr" in unit else "Lakh"
+            session.qualification_state.budget = f"₹{budget_match.group(2)} {unit_str}"
+        elif "1.35" in lower or "1.5" in lower or "1.75" in lower:
+            m_num = re.search(r'\b(1\.\d+)\b', lower)
+            if m_num:
+                session.qualification_state.budget = f"₹{m_num.group(1)} Cr"
 
         # Interest Level
         if any(w in lower for w in ["not interested", "nahi chahiye", "no interest", "don't want"]):
@@ -298,8 +302,72 @@ class AgentService:
         opt_out_triggered = session.opt_out_triggered
         is_ended = session.is_conversation_ended
 
+        # 0. MEMORY RECALL INQUIRIES (e.g. "What budget did I tell you?", "What configuration did I ask for?")
+        if any(q in lower for q in ["what budget did i", "what was my budget", "what did i tell you", "my budget was", "mera budget", "do you remember my budget", "what did i say", "what configuration did i", "what flat did i"]):
+            b = session.qualification_state.budget
+            c = session.qualification_state.configuration
+            p = " for your family" if session.qualification_state.purpose == "Self-use" else (" for investment" if session.qualification_state.purpose == "Investment" else "")
+
+            # Specific budget inquiry
+            if any(q in lower for q in ["budget", "budget did i", "was my budget", "mera budget"]):
+                if b:
+                    c_clause = f" for a {c}" if c else ""
+                    if detected_lang == "Hindi":
+                        reply = f"आपने बताया था कि आपका बजट लगभग {b} है{c_clause}{p}। क्या आप सेक्टर 79 में साइट विजिट शेड्यूल करना चाहेंगे?"
+                    elif detected_lang == "Hinglish":
+                        reply = f"Aapne bataya tha ki aapka budget around {b} hai{c_clause}{p}. Kya aap Sector 79 mein visit schedule karna chahenge?"
+                    else:
+                        reply = f"You mentioned your budget is around {b}{c_clause}{p}. Would you like to explore scheduling a site visit to Sector 79?"
+                else:
+                    if detected_lang == "Hindi":
+                        reply = "आपने अभी तक अपना बजट साझा नहीं किया है। हमारे 2 BHK ₹1.35 करोड़ और 3 BHK ₹1.75 करोड़ से शुरू होते हैं। आपका क्या बजट है?"
+                    elif detected_lang == "Hinglish":
+                        reply = "Aapne abhi tak apna budget share nahi kiya hai. Hamare 2 BHK ₹1.35 Cr aur 3 BHK ₹1.75 Cr se start hote hain. Aapka kya budget plan hai?"
+                    else:
+                        reply = "You haven't shared your budget with me yet. Our 2 BHK residences start at ₹1.35 Crore onwards and 3 BHK at ₹1.75 Crore onwards. What budget range are you planning for?"
+
+            # Specific configuration inquiry
+            elif any(q in lower for q in ["configuration", "which flat", "which bhk", "bhk did i"]):
+                if c:
+                    b_clause = f" with a budget around {b}" if b else ""
+                    if detected_lang == "Hindi":
+                        reply = f"आपने बताया था कि आप {c} देख रहे हैं{b_clause}{p}। क्या आप साइट विजिट शेड्यूल करना चाहेंगे?"
+                    elif detected_lang == "Hinglish":
+                        reply = f"Aapne bataya tha ki aap {c} explore kar rahe hain{b_clause}{p}. Kya aap visit schedule karna chahenge?"
+                    else:
+                        reply = f"You mentioned you are looking for a {c}{b_clause}{p}. Would you like to explore scheduling a site visit to Sector 79?"
+                else:
+                    if detected_lang == "Hindi":
+                        reply = "आपने अभी तक कोई कॉन्फ़िगरेशन नहीं बताई है। हमारे पास 2 BHK और 3 BHK उपलब्ध हैं। आप किसमें रुचि रखते हैं?"
+                    elif detected_lang == "Hinglish":
+                        reply = "Aapne abhi tak configuration specify nahi ki hai. Hamare paas 2 BHK aur 3 BHK available hain. Aap kaunsi prefer karenge?"
+                    else:
+                        reply = "You haven't specified a configuration preference yet. We offer 2 BHK (from ₹1.35 Cr) and 3 BHK (from ₹1.75 Cr). Which one would you like to explore?"
+
+            # General memory inquiry
+            else:
+                details = []
+                if c: details.append(f"configuration: {c}")
+                if b: details.append(f"budget: around {b}")
+                if session.qualification_state.purpose: details.append(f"purpose: {session.qualification_state.purpose}")
+                if details:
+                    summary_str = ", ".join(details)
+                    if detected_lang == "Hindi":
+                        reply = f"मैंने आपकी ये प्राथमिकताओं को नोट किया है: {summary_str}। क्या मैं सेक्टर 79 में आपके लिए साइट विजिट शेड्यूल करूँ?"
+                    elif detected_lang == "Hinglish":
+                        reply = f"Maine aapki details note ki hain: {summary_str}. Kya aap Sector 79 mein visit schedule karna chahenge?"
+                    else:
+                        reply = f"I have noted your preferences so far: {summary_str}. Would you like to schedule a site visit to Sector 79?"
+                else:
+                    if detected_lang == "Hindi":
+                        reply = "आपने अभी तक कोई विशिष्ट आवश्यकता साझा नहीं की है। मैं 2 BHK (₹1.35 करोड़+) या 3 BHK (₹1.75 करोड़+) के बारे में क्या जानकारी दे सकता हूँ?"
+                    elif detected_lang == "Hinglish":
+                        reply = "Aapne abhi tak specific preferences share nahi ki hain. Main 2 BHK (₹1.35 Cr+) ya 3 BHK (₹1.75 Cr+) ke baare mein kya assist kar sakta hoon?"
+                    else:
+                        reply = "You haven't shared specific requirements with me yet. How can I assist you with Northstar One (2 BHK from ₹1.35 Cr, 3 BHK from ₹1.75 Cr) in Sector 79?"
+
         # 1. STOP COMMUNICATION / OPT-OUT
-        if any(w in lower for w in ["stop messaging", "stop calling", "do not call", "dnc", "remove my number", "mat karo msg", "msg mat karo", "unsubscribe", "don't contact"]):
+        elif any(w in lower for w in ["stop messaging", "stop calling", "do not call", "dnc", "remove my number", "mat karo msg", "msg mat karo", "unsubscribe", "don't contact"]):
             opt_out_triggered = True
             session.opt_out_triggered = True
             is_ended = True
@@ -397,20 +465,20 @@ class AgentService:
 
         # 8. PRICE & CONFIGURATION INQUIRIES
         elif any(w in lower for w in ["price", "cost", "rate", "starting price", "pricing", "kitne ka hai", "daam", "budget"]):
-            if "2 bhk" in lower or "2bhk" in lower:
+            if "2 bhk" in lower or "2bhk" in lower or (session.qualification_state.configuration == "2 BHK" and "3 bhk" not in lower):
                 if detected_lang == "Hindi":
                     reply = "नॉर्थस्टार वन, सेक्टर 79 में 2 BHK की शुरुआती कीमत ₹1.35 करोड़ से है। क्या आप इसे स्वयं रहने के लिए देख रहे हैं या निवेश के उद्देश्य से?"
                 elif detected_lang == "Hinglish":
                     reply = "Northstar One, Sector 79 mein 2 BHK ki starting price ₹1.35 Crore onwards hai. Kya aap isse self-use ke liye dekh rahe hain ya investment purpose se?"
                 else:
-                    reply = "At Northstar One (Sector 79, Gurugram), our 2 BHK residences start at ₹1.35 Crore onwards. Are you looking at this for self-use or as an investment?"
-            elif "3 bhk" in lower or "3bhk" in lower:
+                    reply = "At Northstar One (Sector 79, Gurugram), our 2 BHK residences start at ₹1.35 Crore onwards. Would you like to schedule a site visit?"
+            elif "3 bhk" in lower or "3bhk" in lower or session.qualification_state.configuration == "3 BHK":
                 if detected_lang == "Hindi":
                     reply = "नॉर्थस्टार वन, सेक्टर 79 में 3 BHK की शुरुआती कीमत ₹1.75 करोड़ से है। क्या आप इसे अपने परिवार के साथ रहने के लिए देख रहे हैं या निवेश के लिए?"
                 elif detected_lang == "Hinglish":
                     reply = "Northstar One, Sector 79 mein 3 BHK residences ₹1.75 Crore onwards start hote hain. Kya aap family ke saath rehne ka plan kar rahe hain ya investment?"
                 else:
-                    reply = "Our 3 BHK configurations at Northstar One start from ₹1.75 Crore onwards. Are you planning for family living or investment?"
+                    reply = "Our 3 BHK configurations at Northstar One start from ₹1.75 Crore onwards. Would you like to explore scheduling a site visit to Sector 79?"
             else:
                 if detected_lang == "Hindi":
                     reply = "नॉर्थस्टार वन (सेक्टर 79, गुरुग्राम) में हमारे 2 BHK ₹1.35 करोड़ से और 3 BHK ₹1.75 करोड़ से शुरू होते हैं। आप किस कॉन्फ़िगरेशन के बारे में अधिक जानना चाहेंगे?"
@@ -522,14 +590,14 @@ class AgentService:
         if "2 bhk" in lower_msg or q.configuration == "2 BHK":
             suggested_card = SuggestedCard(
                 type="2bhk",
-                title="Northstar One — 2 BHK Luxury",
+                title="Northstar One — 2 BHK",
                 subtitle="Starting price: ₹1.35 Cr onwards",
                 price="₹1.35 Cr onwards"
             )
         elif "3 bhk" in lower_msg or q.configuration == "3 BHK":
             suggested_card = SuggestedCard(
                 type="3bhk",
-                title="Northstar One — 3 BHK Premier",
+                title="Northstar One — 3 BHK",
                 subtitle="Starting price: ₹1.75 Cr onwards",
                 price="₹1.75 Cr onwards"
             )

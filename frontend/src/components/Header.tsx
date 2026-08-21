@@ -1,5 +1,5 @@
 import React from 'react';
-import { Sparkles, Building, PhoneCall, BarChart3, RotateCcw, Menu, MapPin } from 'lucide-react';
+import { Sparkles, PhoneCall, BarChart3, RotateCcw, Menu, MapPin } from 'lucide-react';
 
 interface HeaderProps {
   onOpenSummary: () => void;
@@ -13,7 +13,6 @@ interface HeaderProps {
 export const Header: React.FC<HeaderProps> = ({
   onOpenSummary,
   onOpenAdvisor,
-  onOpenFloorPlans,
   onResetChat,
   onToggleMobileDrawer,
 }) => {
@@ -62,16 +61,6 @@ export const Header: React.FC<HeaderProps> = ({
 
         {/* ── RIGHT: action buttons ── */}
         <div className="flex items-center gap-1 sm:gap-2 shrink-0">
-          {/* Floor Plans — hidden on small mobile */}
-          <button
-            id="header-floorplans-btn"
-            onClick={onOpenFloorPlans}
-            className="hidden md:inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium text-[#404040] hover:text-[#1A1A1A] hover:bg-[#F0ECE6] border border-[#EAE6E1] transition-colors"
-          >
-            <Building className="w-3.5 h-3.5 text-[#735A3A]" />
-            Floor Plans
-          </button>
-
           {/* Advisor */}
           <button
             id="header-advisor-btn"

@@ -54,7 +54,7 @@ LEAD CLASSIFICATION: ${lead.interestLevel === 'High' ? 'QUALIFIED LEAD' : 'INFOR
 - Follow-up: ${lead.followUp}
 
 AI SYNTHESIS & SALES RECOMMENDATION:
-${lead.extractedInsights || 'The client showed particular interest in properties with unobstructed views and emphasized the need for a modern, open-plan kitchen. Prioritize showing units in Tower B and C.'}
+${lead.extractedInsights || 'Customer engaged in property consultation for Northstar One, Sector 79 Gurugram.'}
 
 FULL CONVERSATION TRANSCRIPT:
 ${transcriptText || 'No conversation recorded.'}
@@ -200,7 +200,7 @@ ${transcriptText || 'No conversation recorded.'}
                   </h4>
                   <p className="text-xs sm:text-sm text-[#595959] leading-relaxed">
                     {lead.extractedInsights ||
-                      'The client showed particular interest in properties with unobstructed views and emphasized the need for a modern, open-plan kitchen. Prioritize showing units in Tower B and C.'}
+                      'Customer engaged in property consultation for Northstar One, Sector 79 Gurugram.'}
                   </p>
                 </div>
               </div>

@@ -147,10 +147,10 @@ async def conversation_analytics_endpoint(request: Dict[str, Any]):
         status="Qualified Lead" if analytics.lead_status in ["Hot", "Warm"] else "Information Seeking",
         leadProfile=lead_prof,
         aiNote=analytics.conversation_summary,
-        recommendedUnits=["Northstar One — Tower B (3 BHK Premier)", "Northstar One — Tower A (2 BHK Luxury)"],
+        recommendedUnits=[],
         totalMessages=len(session.messages),
         durationMinutes=3,
-        keyTopicsDiscussed=["Project Overview", "Pricing & Layouts", "Sector 79 Connectivity"]
+        keyTopicsDiscussed=["Project Overview", "Configurations", "Site Visit Inquiries"]
     )
 
 @app.post("/api/analytics", response_model=StructuredLeadAnalytics)
